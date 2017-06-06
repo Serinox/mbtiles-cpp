@@ -100,7 +100,8 @@ protected:
 int long2tilex(double lon, int z);
 int lat2tiley(double lat, int z);
 double tilex2long(int x, int z);
-double tiley2lat(int y, int z);
+double tiley2lat(int y, int z, int* correctedCoord = nullptr);
+double tiley2latNoTileCoordCorrect(int y, int z);
 
 #endif //_VECTOR_TILE_H
 

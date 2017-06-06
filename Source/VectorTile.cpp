@@ -90,9 +90,10 @@ DecodeVectorTile::DecodeVectorTile(int tileZoom, int tileColumn, int tileRow, cl
 	this->output = &output;
 	this->numTiles = pow(2,tileZoom);
 	this->lonMin = tilex2long(tileColumn, tileZoom);
-	this->latMax = tiley2lat(tileRow, tileZoom);
+	int correctedCoord = 0;
+	this->latMax = tiley2lat(tileRow, tileZoom,&correctedCoord);
 	this->lonMax = tilex2long(tileColumn+1, tileZoom);
-	this->latMin = tiley2lat(tileRow+1, tileZoom);
+	this->latMin = tiley2latNoTileCoordCorrect (correctedCoord+1, tileZoom);
 	this->dLat = this->latMax - this->latMin;
 	this->dLon = this->lonMax - this->lonMin;
 }
@@ -272,8 +273,10 @@ int long2tilex(double lon, int z)
 int lat2tiley(double lat, int z)
 {
 	int y = (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z)));
-	int ymax  = 1 << z;
+
+	int ymax = 1 << z;
 	y = ymax - y - 1;
+
 	return y;
 }
 
@@ -282,11 +285,26 @@ double tilex2long(int x, int z)
 	return x / pow(2.0, z) * 360.0 - 180;
 }
 
-double tiley2lat(int y, int z)
+double tiley2lat(int y, int z, int* correctedCoord)
 {
 	double n = pow(2.0,z);
-	int ymax  = 1 << z;
-	y = ymax - y - 1;
+
+		int ymax = 1 << z;
+		y = ymax - y - 1;
+		if (y < 0 ){
+			y = ymax +1;
+		}
+
+	if (correctedCoord!= nullptr){
+		*correctedCoord = y;
+	}
+
+	double latRad = atan(sinh(M_PI*(1-(2*y/n))));
+	return 180.0 / M_PI * latRad;
+}
+
+double tiley2latNoTileCoordCorrect(int y, int z){
+	double n = pow(2.0,z);
 	double latRad = atan(sinh(M_PI*(1-(2*y/n))));
 	return 180.0 / M_PI * latRad;
 }
