@@ -181,8 +181,8 @@ void DecodeVectorTile::DecodeGeometry(const ::vector_tile::Tile_Feature &feature
 				int value2 = ((v >> 1) ^ (-(v & 1)));
 				cursorx += value1;
 				cursory += value2;
-				double px = this->dLon * double(cursorx) / double(extent) + this->lonMin;
-				double py = - this->dLat * double(cursory) / double(extent) + this->latMax;
+				double px = double(cursorx);// this->dLon * double(cursorx) / double(extent) + this->lonMin;
+				double py = double(cursory);//- this->dLat * double(cursory) / double(extent) + this->latMax;
 				
 				if (feature.type() == vector_tile::Tile_GeomType_POINT)
 					pointsOut.push_back(Point2D(px, py));
@@ -215,8 +215,8 @@ void DecodeVectorTile::DecodeGeometry(const ::vector_tile::Tile_Feature &feature
 				int value2 = ((v >> 1) ^ (-(v & 1)));
 				cursorx += value1;
 				cursory += value2;
-				double px = this->dLon * double(cursorx) / double(extent) + this->lonMin;
-				double py = - this->dLat * double(cursory) / double(extent) + this->latMax;
+				double px = double(cursorx);//this->dLon * double(cursorx) / double(extent) + this->lonMin;
+				double py = double(cursory);//- this->dLat * double(cursory) / double(extent) + this->latMax;
 
 				points.push_back(Point2D(px, py));
 				pointsTileSpace.push_back(Point2D(cursorx, cursory));
