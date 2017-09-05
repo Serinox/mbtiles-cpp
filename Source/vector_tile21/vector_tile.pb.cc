@@ -2,7 +2,7 @@
 // source: vector_tile.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "vector_tile.pb.h"
+#include "vector_tile21/vector_tile.pb.h"
 
 #include <algorithm>
 
