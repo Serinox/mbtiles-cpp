@@ -5,3 +5,4 @@ example2
 *.proto
 
 .idea/
+.DS_Store
